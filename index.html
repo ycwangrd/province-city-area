@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>省市县联动Document</title>
+</head>
+<body>
+<label>
+    <select name="province" onchange="changeProvince(this);">
+        <option value="">请选择</option>
+    </select>
+</label>
+<label>
+    <select name="city" onchange="changeCity(this);">
+        <option value="">请选择</option>
+    </select>
+</label>
+<label>
+    <select name="area">
+        <option value="">请选择</option>
+    </select>
+</label>
+<script type="text/javascript" src="jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="ChinaCitys.json.js"></script>
+<script type="text/javascript">
+var province=citys=areas=null;
+$(function () {
+	$('select[name=province]').empty();
+    $.each(chinaCitys, function (i, value) {
+        province = province || value;
+        $('select[name=province]').append('<option value="' + value.province + '">' + value.province + '</option>');
+		if (!citys) {
+			citys = value.citys;
+			$('select[name=city]').empty();
+			$.each(citys, function (j, city) {
+				$('select[name=city]').append('<option value="' + city.city + '">' + city.city + '</option>');
+				if(!areas) {
+					areas = city.areas;	
+					$('select[name=area]').empty();
+					$.each(areas, function(k, area) {
+						$('select[name=area]').append('<option value="' + area.area + '">' + area.area + '</option>');
+					});
+				}
+			});
+		}
+    });
+});
+
+/**
+ * 省份选择变化
+ */
+function changeProvince(select) {
+	$.each(chinaCitys, function (i, value) {
+		if (select.value === value.province) {
+			province = value;
+			citys = value.citys;
+			areas = null;
+			$('select[name=city]').empty();
+			$.each(citys, function (j, city) {
+				$('select[name=city]').append('<option value="' + city.city + '">' + city.city + '</option>');
+				if(!areas) {
+					areas = city.areas;	
+					$('select[name=area]').empty();
+					$.each(areas, function(k, area) {
+						$('select[name=area]').append('<option value="' + area.area + '">' + area.area + '</option>');
+					});
+				}
+			});
+		}
+	});
+}
+
+/**
+ * 市选择变化
+ */
+function changeCity(select) {
+	$.each(citys, function(k, city) {
+		if(select.value === city.city) {
+			areas = city.areas;	
+			$('select[name=area]').empty();
+			$.each(areas, function(k, area) {
+				$('select[name=area]').append('<option value="' + area.area + '">' + area.area + '</option>');
+			});
+		}
+	});
+}
+</script>
+</body>
+</html>
